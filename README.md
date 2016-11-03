@@ -22,11 +22,14 @@ Here thymeleaf will process the text inside the `th:text` attribute, and replace
 Thymeleaf works by replacing the contents of the tags that it's attributes are defined on
 Another example is:
 
-    <tr th:each="prod : ${prods}">
-	    <td th:text="${prod.name}">Onions</td>
-	    <td th:text="${prod.price}">2.41</td>
-    <tr>
-   Here thymeleaf will repeat the `<tr>` with the list of products, this is defined by the attribute `th:each`, it will also remove the dummy content in both the `<td>` tags, and replace them with the content that is evaluated from `th:text="${prod.name}"` and `th:text="${prod.price}"`.
+```html
+<tr th:each="prod : ${prods}">
+	<td th:text="${prod.name}">Onions</td>
+	<td th:text="${prod.price}">2.41</td>
+<tr>
+```
+
+Here thymeleaf will repeat the `<tr>` with the list of products, this is defined by the attribute `th:each`, it will also remove the dummy content in both the `<td>` tags, and replace them with the content that is evaluated from `th:text="${prod.name}"` and `th:text="${prod.price}"`.
 
 ### Attributes
 
@@ -34,33 +37,43 @@ Thymeleaf is an attribute based template engine, it processes attributes and the
 
 * `th:text`: this attribute is responsible for displaying text that is evaluated from the expression inside it, it will process the expression and then display the text **html-encoded**, 
 Example:
-`<p th:text="#{home.welcome}">Welcome to our grocery store!</p>`
 
-* `th:utext`: Similar to previous attribute but this one display text **unescaped** for more inforamtion check [using_texts](http://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf.html#using-texts)
+```html
+<p th:text="#{home.welcome}">Welcome to our grocery store!</p>
+```
+
+* `th:utext`: Similar to previous attribute but this one display text **unescaped** for more inforamtion check [using_texts](http://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#using-texts)
 * `th:attr` : Takes an HTML attribute and sets it's value dynamically, example: '
 `<input type="submit" value="Subscribe me!" th:attr="value=#{subscribe.submit}"/>`
 The `value` attribute will be set to the value of `#{subscribe.submit}` after processing, replacing the supplied `value="Subscribe me!"`
 * `th:value`,`th:action`,`th:href, th:onclick`...etc: Those attributes can be used as a shorthand of the `th:attr` syntax as equally equivilant to it, so the attribute `th:action` is equal to `th:attr="action="` 
-* `th:attrappend`: This will not replace the attribute value, but will only append the value to it, example: `th:attrappend="class=${' ' + cssStyle}"`, for more information check [setting_attribute_values](http://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf.html#setting-attribute-values)
+* `th:attrappend`: This will not replace the attribute value, but will only append the value to it, example: `th:attrappend="class=${' ' + cssStyle}"`, for more information check [setting_attribute_values](http://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#setting-attribute-values)
 * `th:each`: This is the iteration attribute, it is analogous to Java's for-each loop: `for(Object o : list)`, but its syntax is 
 
-        <tr th:each="prod,iterStat : ${prods}" th:class="${iterStat.odd}? 'odd'">
-           <td th:text="${prod.name}">Onions</td>
-           <td th:text="${prod.price}">2.41</td>
-            <td th:text="${prod.inStock}? #{true} : #{false}">yes</td>
-        </tr>
-    The `th:each="prod,iterStat : ${prods}"` is equivilat to `for(Product prod : prods)` and the `iterStat` is the status variable of the iteration, it contains inforamtion about current iteration like its number,index,total count ...etc. 
-    The iteration object `prod` can then be accessed in the context of the tag `<th>`, meaning it will only exist within the tag that it's been defined in, for more information check [iteration](http://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf.html#iteration)
+```html
+<tr th:each="prod,iterStat : ${prods}" th:class="${iterStat.odd}? 'odd'">
+	<td th:text="${prod.name}">Onions</td>
+	<td th:text="${prod.price}">2.41</td>
+	<td th:text="${prod.inStock}? #{true} : #{false}">yes</td>
+</tr>
+```
+
+The `th:each="prod,iterStat : ${prods}"` is equivilat to `for(Product prod : prods)` and the `iterStat` is the status variable of the iteration, it contains inforamtion about current iteration like its number,index,total count ...etc. 
+
+The iteration object `prod` can then be accessed in the context of the tag `<th>`, meaning it will only exist within the tag that it's been defined in, for more information check [iteration](http://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#iteration)
 * `th:if`: Evaluates the conditions specified in the attribute and if they are true, the tag is displayed, if not they are not displayed, example : `th:if="${user.admin}"`
 * `th:unless`: Is the opposite of `th:if`, it will display the tag if the value is false, so `th:unless="${user.admin}"` is equal to `th:if="${!(user.admin)}"`
 * `th:switch` and `th:case`: Those attributes are used to create a swtich statement, `th:switch` will hold the variable to switch on, and `th:case` will evaluate the case statements for this variable, example
 
-         <div th:switch="${user.role}">
-	          <p th:case="'admin'">User is an administrator</p>
-	           <p th:case="#{roles.manager}">User is a manager</p>
-	          <p th:case="*">User is some other thing</p>
-         </div>
-for more information check [conditional_evaluation](http://www.thymeleaf.org/doc/tutorials/2.1/usingthymeleaf.html#conditional-evaluation)
+```html
+<div th:switch="${user.role}">
+	<p th:case="'admin'">User is an administrator</p>
+	<p th:case="#{roles.manager}">User is a manager</p>
+	<p th:case="*">User is some other thing</p>
+</div>
+```
+
+For more information check [conditional_evaluation](http://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#conditional-evaluation)
 
 _____________________
 
