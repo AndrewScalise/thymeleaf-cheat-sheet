@@ -7,7 +7,7 @@ This is a cheat sheet to summarize all the main thymeleaf features and how to us
 
 
 Thymeleaf is an engine that builds dynamic pages from templates that are written in XHTML with the help of some special attributes, so it is a **template engine**.
-A template engine is an engine that parses XHTML pages that contain special tags or attributes or syntax that is bound to variables at the server, and resolves those them into their values, then parses the page according to those values and builds a normal HTML page.
+A template engine is an engine that parses XHTML/HTML pages that contain special tags or attributes or syntax that is bound to variables at the server, and resolves those them into their values, then parses the page according to those values and builds a normal HTML page.
 Thymeleaf is an **in-memory** template engine, so it does all of it's processing in memory, it builds a DOM that maps to the HTML of the page in-memory and when values change the parsed pages are changed, also it's caching is an in-memory caching system.
 Thymeleaf is a template engine that relays mostly on **attributes** instead of tags like what JSP would do, this makes it testable in the browser directly without requiring a server.
 Those attributes are then translated and processed by Thymeleaf into normal HTML.
@@ -22,71 +22,6 @@ Another example is:
 	    <td th:text="${prod.price}">2.41</td>
     <tr>
    Here thymeleaf will repeat the `<tr>` with the list of products, this is defined by the attribute `th:each`, it will also remove the dummy content in both the `<td>` tags, and replace them with the content that is evaluated from `th:text="${prod.name}"` and `th:text="${prod.price}"`.
-
-_________
-
-##**Thymeleaf Layout Dialect**
-
-This dialect adds JSF-like template hierarchy to the Thymeleaf Engine, which makes it possible that you have templates extending other templates and overriding fragments of those parent templates that we open for extension. This is useful when you have a common layout that you want to apply to all your pages and views, for example a footer or a sidebar or a common CSS and JavaScript tags. 
-To start you need the dependency:
-
-    <dependency>
-			<groupId>nz.net.ultraq.thymeleaf</groupId>
-			<artifactId>thymeleaf-layout-dialect</artifactId>
-			<version>1.3.1</version>
-	</dependency>
-
-So you just add them to your parent layout, and then make the part that you want to be then filled by other templates a **fragment**, then in other templates you use this parent template as your **layout-decorator**, then override the **fragment** to filled by your data. 
-Example say we have a **main.html** which contains a navbar a sidebar and a footer, and it has the middle part empty waiting for content to be inserted in it, it then defines this part as follows
-
-    <div class="container">
-		<div layout:fragment="content" class="noborder">
-		</div>
-	</div>
-
-Then in the overriding template, for example **index.html**, we use `layout:decorator="main"` at the `<html>` tag, where **main** is the parent template to be extended.
-Then in **index.html** we do this to override the fragment `content`
-
-    <div layout:fragment="content">
-		<p th:text="${template}">Should not be displayed</p>
-	</div>
-This will override the fragments content withe the content in the `div` tag.
-
-for more information, please check [this](https://github.com/ultraq/thymeleaf-layout-dialect)
-
----------------------
-###**Spring Integration**
-Thymeleaf has a spring integration project, that eases the integration of **Spring MVC** with thymeleaf as a template.
-
-1. Add `thyemelaf-spring` dependency to your dependencies
-
-        <dependency>
-			<groupId>org.thymeleaf</groupId>
-			<artifactId>thymeleaf-spring4</artifactId>
-			<version>2.1.4.RELEASE</version>
-		</dependency>
-2. Add this configuration to your spring servlet configuartion
-
-        <bean id="templateResolver"
-		class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
-			<property name="prefix" value="/WEB-INF/templates/" />
-			<property name="suffix" value=".html" />
-			<property name="templateMode" value="HTML5" />
-	    </bean>
-	    <bean id="templateEngine" class="org.thymeleaf.spring4.SpringTemplateEngine">
-			<property name="templateResolver" ref="templateResolver" />
-			<property name="additionalDialects">
-				<set>
-					<bean class="nz.net.ultraq.thymeleaf.LayoutDialect" />
-				</set>
-			</property>
-	    </bean>
-	    <bean class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
-			<property name="templateEngine" ref="templateEngine" />
-	    </bean>
-
-This configuration will make the thymeleaf resolver the `ViewResolver` of Spring MVC, the `<property name="templateMode" value="HTML5" />` is particulary important, as it sets the mode of which thymeleaf should operate, we here specify the mode to be **HTML5**, which means that thymeleaf should produce valid HTML5 html.
-_____________________
 
 ### **Attributes**
 Thymeleaf is an attribute based template engine, it processes attributes and their values to build it's DOM tree.
