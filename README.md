@@ -17,10 +17,19 @@ Those attributes are then translated and processed by Thymeleaf into normal HTML
 
 ## How it works
 
-`<p th:text="'Thymeleaf will display this'">text</p>`
+```html
+<p th:text="'Thymeleaf will display this'">text</p>
+```
+
 Here thymeleaf will process the text inside the `th:text` attribute, and replace the contents of the `<p>` tag with it.
-Thymeleaf works by replacing the contents of the tags that it's attributes are defined on
-Another example is:
+
+We can use **variable expressions** syntax `${...}` to insert data passed in from a controller.
+
+```html
+<p th:text="${message}">text</p>
+```
+
+Thymeleaf works by replacing the contents of the tags that it's attributes are defined on. Another example is:
 
 ```html
 <tr th:each="prod : ${prods}">
