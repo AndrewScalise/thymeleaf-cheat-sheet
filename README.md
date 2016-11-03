@@ -15,7 +15,7 @@ Thymeleaf is a template engine that relays mostly on **attributes** instead of t
 
 Those attributes are then translated and processed by Thymeleaf into normal HTML.
 
-### How it works
+## How it works
 
 `<p th:text="'Thymeleaf will display this'">text</p>`
 Here thymeleaf will process the text inside the `th:text` attribute, and replace the contents of the `<p>` tag with it.
@@ -31,34 +31,34 @@ Another example is:
 
 Here thymeleaf will repeat the `<tr>` with the list of products, this is defined by the attribute `th:each`, it will also remove the dummy content in both the `<td>` tags, and replace them with the content that is evaluated from `th:text="${prod.name}"` and `th:text="${prod.price}"`.
 
-### Attributes
+## Attributes
 
 Thymeleaf is an attribute based template engine, it processes attributes and their values to build it's DOM tree.
 
-* `th:text`: this attribute is responsible for displaying text that is evaluated from the expression inside it, it will process the expression and then display the text **html-encoded**, 
+* `th:text`: this attribute is responsible for displaying text that is evaluated from the expression inside it, it will process the expression and then display the text **html-encoded**,
 Example:
 
 ```html
-<p th:text="#{home.welcome}">Welcome to our grocery store!</p>
+<p th:text="${home.welcome}">Welcome to our grocery store!</p>
 ```
 
 * `th:utext`: Similar to previous attribute but this one display text **unescaped** for more inforamtion check [using_texts](http://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#using-texts)
 * `th:attr` : Takes an HTML attribute and sets it's value dynamically, example: '
-`<input type="submit" value="Subscribe me!" th:attr="value=#{subscribe.submit}"/>`
-The `value` attribute will be set to the value of `#{subscribe.submit}` after processing, replacing the supplied `value="Subscribe me!"`
-* `th:value`,`th:action`,`th:href, th:onclick`...etc: Those attributes can be used as a shorthand of the `th:attr` syntax as equally equivilant to it, so the attribute `th:action` is equal to `th:attr="action="` 
+`<input type="submit" value="Subscribe me!" th:attr="value=${subscribe.submit}"/>`
+The `value` attribute will be set to the value of `${subscribe.submit}` after processing, replacing the supplied `value="Subscribe me!"`
+* `th:value`,`th:action`,`th:href, th:onclick`...etc: Those attributes can be used as a shorthand of the `th:attr` syntax as equally equivilant to it, so the attribute `th:action` is equal to `th:attr="action="`
 * `th:attrappend`: This will not replace the attribute value, but will only append the value to it, example: `th:attrappend="class=${' ' + cssStyle}"`, for more information check [setting_attribute_values](http://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#setting-attribute-values)
-* `th:each`: This is the iteration attribute, it is analogous to Java's for-each loop: `for(Object o : list)`, but its syntax is 
+* `th:each`: This is the iteration attribute, it is analogous to Java's for-each loop: `for(Object o : list)`, but its syntax is
 
 ```html
 <tr th:each="prod,iterStat : ${prods}" th:class="${iterStat.odd}? 'odd'">
 	<td th:text="${prod.name}">Onions</td>
 	<td th:text="${prod.price}">2.41</td>
-	<td th:text="${prod.inStock}? #{true} : #{false}">yes</td>
+	<td th:text="${prod.inStock}? ${true} : ${false}">yes</td>
 </tr>
 ```
 
-The `th:each="prod,iterStat : ${prods}"` is equivilat to `for(Product prod : prods)` and the `iterStat` is the status variable of the iteration, it contains inforamtion about current iteration like its number,index,total count ...etc. 
+The `th:each="prod,iterStat : ${prods}"` is equivilat to `for(Product prod : prods)` and the `iterStat` is the status variable of the iteration, it contains inforamtion about current iteration like its number,index,total count ...etc.
 
 The iteration object `prod` can then be accessed in the context of the tag `<th>`, meaning it will only exist within the tag that it's been defined in, for more information check [iteration](http://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#iteration)
 * `th:if`: Evaluates the conditions specified in the attribute and if they are true, the tag is displayed, if not they are not displayed, example : `th:if="${user.admin}"`
@@ -68,21 +68,19 @@ The iteration object `prod` can then be accessed in the context of the tag `<th>
 ```html
 <div th:switch="${user.role}">
 	<p th:case="'admin'">User is an administrator</p>
-	<p th:case="#{roles.manager}">User is a manager</p>
+	<p th:case="${roles.manager}">User is a manager</p>
 	<p th:case="*">User is some other thing</p>
 </div>
 ```
 
 For more information check [conditional_evaluation](http://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#conditional-evaluation)
 
-_____________________
-
-### Expressions
+## Expressions
 
 Thymeleaf works based on many expressions, thymeleaf has different expression syntax other than the traditional `${variablename.propertyname}` syntax, namely:
 
-* `#{message.in.proprties.file}` similar to the **i18n** resolver in **JSF**, this expressions will look for the value provided in the localization properties files provided to the application.
-Example: `<p th:text="#{brand.name}">Brand Name</p>`, when using spring it will use the `MessageSource` of spring
+* `${message.in.proprties.file}` similar to the **i18n** resolver in **JSF**, this expressions will look for the value provided in the localization properties files provided to the application.
+Example: `<p th:text="${brand.name}">Brand Name</p>`, when using spring it will use the `MessageSource` of spring
 * `${variable}`: This is the variables expression, if your expression should evaluate to a variable or you have a variable in your `model` as an attribute, you must use this expression to access it, other expressions are used for different purposes and may not functional correctly with variables, example:
 `<span th:text="${today}">13 february 2011</span>`
 
@@ -109,12 +107,12 @@ Example:
 <span th:text="${#locale.country}">
 ```
 
-and 
+and
 
 ```html
 <span th:text="${#calendars.format(today,'dd MMMM yyyy')}">13 May 2011</span>
 ```
-	
+
 * `*{property}`: This is used the same way as the `${variable}` but works on selected objects, i.e. objects which are set using `th:object` attribute, for example
 
 ```html
@@ -134,7 +132,7 @@ To add get parameters use `@{/link/path(param=value)}` which will generate **/li
 For Path variables use: `@{/link/{pathVariable}/path(pathVariable=${variable})}`
 which will replace the **{pathVariable}** with the value from **${variable}**
 
-*  Literals: You can also write some normal literals instead of any expressions, 
+*  Literals: You can also write some normal literals instead of any expressions,
 	* "'the literal string'": You can write normal strings between two **''**  single quotes
 	*  "3 + 2": Normal numeric expressions
 	* "false","true" and "null": are evaluted to normal `false`,`true` and `null` expressions
